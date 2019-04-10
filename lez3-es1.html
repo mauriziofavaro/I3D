@@ -1,0 +1,132 @@
+<html>
+  <head>
+    <title>Lezione3 esercizio1</title>
+    <style>canvas { width: 100%; height: 100% }</style>
+  </head>
+  <body>
+    <script src="lib/three.js"></script>
+    <script src="lib/stats.min.js"></script>
+    <script>
+
+    var scene, camera, renderer, stats, meshFront, meshBack, meshLeft, meshRight, meshDown ,meshUp
+
+    function Init(){
+      scene = new THREE.Scene();
+      camera = new THREE.PerspectiveCamera( 75,
+        window.innerWidth / window.innerHeight,
+        0.1, 1000 );
+      renderer = new THREE.WebGLRenderer();
+      renderer.setSize( window.innerWidth, window.innerHeight );
+      document.body.appendChild( renderer.domElement );
+
+      stats = new Stats();
+      stats.domElement.style.position = 'absolute';
+      stats.domElement.style.top = '0px';
+      document.body.appendChild( stats.domElement );
+
+      materialFront = new THREE.MeshBasicMaterial( {
+        color: 0x00ffff,
+        side: THREE.FrontSide}
+      );
+      materialBack = new THREE.MeshBasicMaterial( {
+        color: 0x00ff00,
+        side: THREE.BackSide}
+      );
+      materialLeft = new THREE.MeshBasicMaterial( {
+        color: 0x0000ff,
+        side: THREE.FrontSide}
+      );
+      materialRight = new THREE.MeshBasicMaterial( {
+        color: 0xff0000,
+        side: THREE.FrontSide}
+      );
+      materialDown = new THREE.MeshBasicMaterial( {
+        color: 0xffff00,
+        side: THREE.BackSide}
+      );
+      materialUp = new THREE.MeshBasicMaterial( {
+        color: 0xffffff,
+        side: THREE.FrontSide}
+      );
+      geometryFront = new THREE.Geometry();
+      geometryFront.vertices.push(new THREE.Vector3(-1, 0, 0));//0
+      geometryFront.vertices.push(new THREE.Vector3(1, 0, 0));//1
+      geometryFront.vertices.push(new THREE.Vector3(-1, 2, 0));//2
+      geometryFront.vertices.push(new THREE.Vector3(1, 2, 0));//3
+      geometryFront.faces.push(new THREE.Face3(0, 1, 2));
+      geometryFront.faces.push(new THREE.Face3(1, 3, 2));
+      geometryBack = new THREE.Geometry();
+      geometryBack.vertices.push(new THREE.Vector3(-1, 0, -2));//4
+      geometryBack.vertices.push(new THREE.Vector3(1, 0, -2));//5
+      geometryBack.vertices.push(new THREE.Vector3(-1, 2, -2));//6
+      geometryBack.vertices.push(new THREE.Vector3(1, 2, -2));//7
+      geometryBack.faces.push(new THREE.Face3(0, 1, 2));
+      geometryBack.faces.push(new THREE.Face3(1, 3, 2));
+      geometryLeft = new THREE.Geometry();
+      geometryLeft.vertices.push(new THREE.Vector3(-1, 0, -2));//4
+      geometryLeft.vertices.push(new THREE.Vector3(-1, 0, 0));//0
+      geometryLeft.vertices.push(new THREE.Vector3(-1, 2, -2));//6
+      geometryLeft.vertices.push(new THREE.Vector3(-1, 2, 0));//2
+      geometryLeft.faces.push(new THREE.Face3(0, 1, 2));
+      geometryLeft.faces.push(new THREE.Face3(1, 3, 2));
+      geometryRight = new THREE.Geometry();
+      geometryRight.vertices.push(new THREE.Vector3(1, 0, 0));//1
+      geometryRight.vertices.push(new THREE.Vector3(1, 0, -2));//5
+      geometryRight.vertices.push(new THREE.Vector3(1, 2, 0));//3
+      geometryRight.vertices.push(new THREE.Vector3(1, 2, -2));//7
+      geometryRight.faces.push(new THREE.Face3(0, 1, 2));
+      geometryRight.faces.push(new THREE.Face3(1, 3, 2));
+      geometryDown = new THREE.Geometry();
+      geometryDown.vertices.push(new THREE.Vector3(-1, 0, 0));//0
+      geometryDown.vertices.push(new THREE.Vector3(1, 0, 0));//1
+      geometryDown.vertices.push(new THREE.Vector3(-1, 0, -2));//4
+      geometryDown.vertices.push(new THREE.Vector3(1, 0, -2));//5
+      geometryDown.faces.push(new THREE.Face3(0, 1, 2));
+      geometryDown.faces.push(new THREE.Face3(1, 3, 2));
+      geometryUp = new THREE.Geometry();
+      geometryUp.vertices.push(new THREE.Vector3(-1, 2, 0));//2
+      geometryUp.vertices.push(new THREE.Vector3(1, 2, 0));//3
+      geometryUp.vertices.push(new THREE.Vector3(-1, 2, -2));//6
+      geometryUp.vertices.push(new THREE.Vector3(1, 2, -2));//7
+      geometryUp.faces.push(new THREE.Face3(0, 1, 2));
+      geometryUp.faces.push(new THREE.Face3(1, 3, 2));
+      meshFront = new THREE.Mesh(geometryFront, materialFront);
+      meshBack = new THREE.Mesh(geometryBack, materialBack);
+      meshLeft = new THREE.Mesh(geometryLeft, materialLeft);
+      meshRight = new THREE.Mesh(geometryRight, materialRight);
+      meshDown = new THREE.Mesh(geometryDown, materialDown);
+      meshUp = new THREE.Mesh(geometryUp, materialUp);
+      scene.add(meshFront);
+      scene.add(meshBack);
+      scene.add(meshLeft);
+      scene.add(meshRight);
+      scene.add(meshDown);
+      scene.add(meshUp);
+
+      camera.position.z = 5;
+    }
+
+    function Render(){
+      requestAnimationFrame(Render);
+      stats.update();
+      meshFront.rotation.y += 0.01;
+      meshBack.rotation.y += 0.01;
+      meshLeft.rotation.y += 0.01;
+      meshRight.rotation.y += 0.01;
+      meshDown.rotation.y += 0.01;
+      meshUp.rotation.y += 0.01;
+      meshUp.rotation.x += 0.01;
+      meshFront.rotation.x += 0.01;
+      meshBack.rotation.x += 0.01;
+      meshLeft.rotation.x += 0.01;
+      meshRight.rotation.x += 0.01;
+      meshDown.rotation.x += 0.01;
+      renderer.render(scene, camera);
+    }
+
+    Init();
+    Render();
+
+    </script>
+  </body>
+</html>

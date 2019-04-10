@@ -1,0 +1,63 @@
+<html>
+  <head>
+    <title>Triangles</title>
+    <style>canvas { width: 100%; height: 100% }</style>
+  </head>
+  <body>
+    <script src="lib/three.js"></script>
+    <script src="lib/stats.min.js"></script>
+    <script>
+
+    var scene, camera, renderer, mesh, meshb, stats;
+
+    function Init(){
+      scene = new THREE.Scene();
+      camera = new THREE.PerspectiveCamera( 75,
+        window.innerWidth / window.innerHeight,
+        0.1, 1000 );
+      renderer = new THREE.WebGLRenderer();
+      renderer.setSize( window.innerWidth, window.innerHeight );
+      document.body.appendChild( renderer.domElement );
+
+      stats = new Stats();
+      stats.domElement.style.position = 'absolute';
+      stats.domElement.style.top = '0px';
+      document.body.appendChild( stats.domElement );
+
+      material = new THREE.MeshBasicMaterial( {
+        color: 0x00ffff,
+        side: THREE.FrontSide}
+      );
+      materialb = new THREE.MeshBasicMaterial( {
+        color: 0x00ff00,
+        side: THREE.BackSide}
+      );
+      geometry = new THREE.Geometry();
+      geometry.vertices.push(new THREE.Vector3(-1, 0, 0));
+      geometry.vertices.push(new THREE.Vector3(1, 0, 0));
+      geometry.vertices.push(new THREE.Vector3(0, 2, 0));
+      geometry.faces.push(new THREE.Face3(0, 1, 2));
+      geometry.faces.push(new THREE.Face3(0, 1, 2));
+      mesh = new THREE.Mesh(geometry, material);
+      meshb = new THREE.Mesh(geometry, materialb);
+      scene.add(mesh);
+      scene.add(meshb);
+
+      camera.position.z = 5;
+    }
+
+    function Render(){
+      requestAnimationFrame(Render);
+      stats.update();
+      //mesh.rotation.x += 0.01;
+      mesh.rotation.y += 0.01;
+      meshb.rotation.y += 0.01;
+      renderer.render(scene, camera);
+    }
+
+    Init();
+    Render();
+
+    </script>
+  </body>
+</html>

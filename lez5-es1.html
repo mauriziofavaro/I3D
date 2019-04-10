@@ -1,0 +1,96 @@
+<html>
+  <head>
+    <title>Lezione5 esercizio1</title>
+    <style>canvas { width: 100%; height: 100% }</style>
+  </head>
+  <body>
+    <script src="lib/three.js"></script>
+    <script src="lib/stats.min.js"></script>
+    <script src="lib/OrbitControls.js"></script>
+    <script>
+
+    var scene, camera, renderer, sun, pivot_sun, planet, pivot_planet, moon, stats;
+
+    var y_axis = new THREE.Vector3(0, 1, 0);
+
+    //TODO axis for rotations with matrices
+    var y_axis_sun = new THREE.Vector3(0, 1, 0);
+    var y_axis_planet = new THREE.Vector3(0, 1, 0);
+    var rotation_angle = 0;
+
+    function Init(){
+      scene = new THREE.Scene();
+      camera = new THREE.PerspectiveCamera( 75,
+        window.innerWidth / window.innerHeight,
+        0.1, 1000 );
+      renderer = new THREE.WebGLRenderer();
+      renderer.setSize( window.innerWidth, window.innerHeight );
+      document.body.appendChild( renderer.domElement );
+
+      stats = new Stats();
+      stats.domElement.style.position = 'absolute';
+      stats.domElement.style.top = '0px';
+      document.body.appendChild( stats.domElement );
+
+      controls = new THREE.OrbitControls( camera );
+
+      // sun
+      var sun_geometry = new THREE.SphereGeometry(10,32,32);
+      var sun_material = new THREE.MeshBasicMaterial( { color: 0xffff00, wireframe: true } );
+      sun = new THREE.Mesh( sun_geometry, sun_material );
+      scene.add( sun );
+
+      // planet
+      pivot_sun = new THREE.Object3D();
+      sun.add(pivot_sun);
+      var planet_geometry = new THREE.SphereGeometry(3,32,32);
+      var planet_material = new THREE.MeshBasicMaterial( { color: 0x0000ff, wireframe: true } );
+      planet = new THREE.Mesh( planet_geometry, planet_material );
+      planet.position.set(20,0,0);
+      planet.rotation.z = 25 * Math.PI/180;
+      pivot_sun.add( planet );
+
+      // moon
+      pivot_planet = new THREE.Object3D();
+      pivot_planet.position.set(20,0,0);
+      pivot_sun.add(pivot_planet);
+      var moon_geometry = new THREE.SphereGeometry(1,32,32);
+      var moon_material = new THREE.MeshBasicMaterial( { color: 0xffffff, wireframe: true } );
+      moon = new THREE.Mesh( moon_geometry, moon_material );
+      moon.position.set(-6,0,0);
+      pivot_planet.add( moon );
+
+      camera.position.z = -30;
+    }
+
+    function Render(){
+      requestAnimationFrame(Render);
+      controls.update();
+      stats.update();
+      delta_time = Date.now() - last_frame;
+
+      //TODO animation with matrices
+      /*rotation_angle += ((delta_time/1000) * (360/365)) * Math.PI/180;
+      pivot_sun.matrix.makeRotationAxis(y_axis_sun, rotation_angle);
+      pivot_sun.matrixAutoUpdate = false;
+      pivot_planet.matrix.makeRotationAxis(y_axis_planet, 12 * rotation_angle);
+      pivot_planet.matrixAutoUpdate = false;
+      planet.matrix.makeRotationAxis(planet.y, 365 * rotation_angle);
+      planet.matrixAutoUpdate = false;*/
+
+      // animation without matrices
+      pivot_sun.rotation.y += ((delta_time/1000) * (360/365)) * Math.PI/180;
+      planet.rotateOnAxis(y_axis, 365 * ((delta_time/1000) * (360/365)) * Math.PI/180);
+      pivot_planet.rotation.y += 12 * ((delta_time/1000) * (360/365)) * Math.PI/180;
+
+      last_frame = Date.now();
+      renderer.render(scene, camera);
+    }
+
+    Init();
+    last_frame = Date.now();
+    Render();
+
+    </script>
+  </body>
+</html>
