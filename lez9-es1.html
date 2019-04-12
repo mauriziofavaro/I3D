@@ -25,6 +25,9 @@
 		<script type="text/x-glsl" id="vertex">
 			attribute float displacement;
 
+			uniform float amplitude;
+
+			// TODO Modify the vertex shader so that amplitude is multiplied by displacement
 			void main() {
 		    	vec3 newPosition = position + normal * displacement;
 				// transforms the vertex from object space to clip space coords
@@ -82,6 +85,7 @@
 				requestAnimationFrame( render );
 				controls.update();
 				stats.update();
+				amplitude = Math.sin(Date.now());
 				renderer.render(scene, camera);
 			}
 
