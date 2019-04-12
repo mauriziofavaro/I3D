@@ -1,6 +1,6 @@
 <html>
 	<head>
-		<title>Lezione9 esercizio2</title>
+		<title>Lezione9 esercizio1</title>
 		<style>
 
 		body {
@@ -25,12 +25,7 @@
 		<script type="text/x-glsl" id="vertex">
 			attribute float displacement;
 
-			varying vec3 vNormal;
-
 			void main() {
-
-				vNormal = normal;
-
 		    	vec3 newPosition = position + normal * displacement;
 				// transforms the vertex from object space to clip space coords
 				gl_Position = projectionMatrix * modelViewMatrix * vec4( newPosition, 1.0 );
@@ -39,13 +34,8 @@
 		</script>
 
 		<script type="text/x-glsl" id="fragment">
-		varying vec3 vNormal;
-
 			void main() {
-
-				vec3 mul = normalize(vec3(50.0, 50.0, 50.0));
-
-				gl_FragColor = vec4(dot(vNormal, mul), dot(vNormal, mul), dot(vNormal, mul), 1.0);
+				gl_FragColor = vec4(1.0, 0.0, 1.0, 1.0);
 			}
 		</script>
 
@@ -86,8 +76,6 @@
 			document.body.appendChild( stats.domElement );
 
 			controls = new THREE.OrbitControls( camera );
-
-
 
 			function render() {
 
